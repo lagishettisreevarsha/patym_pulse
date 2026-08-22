@@ -1,0 +1,42 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Merchant {
+  id                 String            @id @default(uuid())
+  name               String
+  business_type      String
+  preferred_language String            @default("en")
+  created_at         DateTime          @default(now())
+  transactions       Transaction[]
+  insights           BusinessInsight[]
+}
+
+model Transaction {
+  id                      String   @id @default(uuid())
+  merchant_id             String
+  merchant                Merchant @relation(fields: [merchant_id], references: [id], onDelete: Cascade)
+  external_transaction_id String?
+  amount                  Float
+  status                  String   // SUCCESS, PENDING, FAILED
+  payment_method          String   // UPI, WALLET, CARD, NETBANKING
+  timestamp               DateTime
+}
+
+model BusinessInsight {
+  id             String   @id @default(uuid())
+  merchant_id    String
+  merchant       Merchant @relation(fields: [merchant_id], references: [id], onDelete: Cascade)
+  insight_type   String   // evening_drop, weekend_rush, high_ticket, normal
+  headline       String
+  observation    String
+  explanation    String
+  recommendation String
+  confidence     String   // HIGH, MEDIUM, LOW
+  created_at     DateTime @default(now())
+}
