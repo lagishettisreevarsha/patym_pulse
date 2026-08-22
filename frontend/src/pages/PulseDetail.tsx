@@ -174,7 +174,7 @@ export default function PulseDetail() {
                     </div>
                     <div>
                       <span className="text-xs font-bold text-slate-200">
-                        {new Date(an.date).toLocaleDateString('en-IN', { weekday: 'long', dateStyle: 'medium' })}
+                        {new Date(an.date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}
                       </span>
                       <p className="text-xs text-slate-400 mt-1 leading-normal">
                         {an.description}
