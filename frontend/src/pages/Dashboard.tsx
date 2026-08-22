@@ -67,6 +67,7 @@ export default function Dashboard() {
   const [pulseLoading, setPulseLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionModal, setActionModal] = useState(false);
+  const merchantId = localStorage.getItem('merchantId') || 'demo-merchant-1';
 
   useEffect(() => {
     fetchDashboardData();
@@ -78,16 +79,16 @@ export default function Dashboard() {
     setError('');
     try {
       // 1. Fetch Merchant Summary & calculated analytics
-      const summaryRes = await axios.get<MerchantSummary>('/api/merchant/summary');
+      const summaryRes = await axios.get<MerchantSummary>(`/api/merchant/summary?merchantId=${merchantId}`);
       setSummary(summaryRes.data);
 
       // 2. Fetch Recent Transactions
-      const txnsRes = await axios.get('/api/merchant/transactions?limit=5');
+      const txnsRes = await axios.get(`/api/merchant/transactions?limit=5&merchantId=${merchantId}`);
       setRecentTxns(txnsRes.data.transactions);
       setLoading(false);
 
       // 3. Fetch Business Pulse from Sarvam AI (loaded asynchronously to improve dashboard speed)
-      const pulseRes = await axios.get<PulseInsight>('/api/business-pulse');
+      const pulseRes = await axios.get<PulseInsight>(`/api/business-pulse?merchantId=${merchantId}`);
       setPulse(pulseRes.data);
     } catch (err: any) {
       console.error(err);

@@ -25,6 +25,7 @@ export default function AskPulse() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<QueryResponse | null>(null);
   const [error, setError] = useState('');
+  const merchantId = localStorage.getItem('merchantId') || 'demo-merchant-1';
 
   const sampleQuestions = [
     'How is my business doing this week?',
@@ -42,7 +43,7 @@ export default function AskPulse() {
     try {
       const res = await axios.post<QueryResponse>('/api/business-pulse/query', {
         question: textToAsk,
-        merchantId: 'demo-merchant-1',
+        merchantId: merchantId,
       });
       setResult(res.data);
     } catch (err: any) {

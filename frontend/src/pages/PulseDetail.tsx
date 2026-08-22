@@ -38,6 +38,7 @@ export default function PulseDetail() {
   const [txPage, setTxPage] = useState(1);
   const [txTotalPages, setTxTotalPages] = useState(1);
   const [error, setError] = useState('');
+  const merchantId = localStorage.getItem('merchantId') || 'demo-merchant-1';
 
   useEffect(() => {
     fetchPulseDetails();
@@ -50,7 +51,7 @@ export default function PulseDetail() {
 
   const fetchPulseDetails = async () => {
     try {
-      const summaryRes = await axios.get('/api/merchant/summary');
+      const summaryRes = await axios.get(`/api/merchant/summary?merchantId=${merchantId}`);
       setDetailData({
         summary: summaryRes.data.summary,
         signals: summaryRes.data.signals,
@@ -64,7 +65,7 @@ export default function PulseDetail() {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get<{ insights: InsightItem[] }>('/api/business-pulse/history');
+      const res = await axios.get<{ insights: InsightItem[] }>(`/api/business-pulse/history?merchantId=${merchantId}`);
       setHistory(res.data.insights);
     } catch (err) {
       console.error(err);
@@ -74,7 +75,7 @@ export default function PulseDetail() {
   const fetchTransactions = async (page: number) => {
     setLoading(true);
     try {
-      const res = await axios.get(`/api/merchant/transactions?page=${page}&limit=12`);
+      const res = await axios.get(`/api/merchant/transactions?page=${page}&limit=12&merchantId=${merchantId}`);
       setTransactions(res.data.transactions);
       setTxTotalPages(res.data.pagination.pages);
     } catch (err) {

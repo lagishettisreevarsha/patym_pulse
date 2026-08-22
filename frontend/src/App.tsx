@@ -11,6 +11,7 @@ function Navigation() {
   const location = useLocation();
   const [resetting, setResetting] = useState(false);
   const [resetMsg, setResetMsg] = useState('');
+  const merchantId = localStorage.getItem('merchantId') || 'demo-merchant-1';
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -84,10 +85,27 @@ function Navigation() {
         </nav>
 
         <div className="flex items-center space-x-3">
+          {/* Profile Switcher Dropdown */}
+          <div className="flex items-center space-x-1.5 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
+            <span className="text-slate-450 font-semibold hidden lg:inline">Profile:</span>
+            <select
+              value={merchantId}
+              onChange={(e) => {
+                localStorage.setItem('merchantId', e.target.value);
+                window.location.reload();
+              }}
+              className="bg-transparent border-none outline-none font-bold text-paytm-cyan cursor-pointer focus:ring-0"
+            >
+              <option value="demo-merchant-1" className="bg-slate-950 text-white font-semibold">Karan Kirana (Grocery)</option>
+              <option value="demo-merchant-2" className="bg-slate-950 text-white font-semibold">Sharma Sweets (Cafe)</option>
+              <option value="demo-merchant-3" className="bg-slate-950 text-white font-semibold">Pooja Boutiques (Fashion)</option>
+            </select>
+          </div>
+
           {/* Demo Data Mode indicator */}
           <div className="flex items-center space-x-2 rounded-full bg-amber-500/10 px-3 py-1 border border-amber-500/20 text-xs font-semibold text-amber-400">
             <Database className="h-3 w-3 animate-pulse" />
-            <span>Demo Data Mode</span>
+            <span>Demo Data</span>
           </div>
 
           <button
